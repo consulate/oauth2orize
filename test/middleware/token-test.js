@@ -148,6 +148,48 @@ vows.describe('token').addBatch({
     },
   },
   
+  'middleware that handles a request in which body was not parsed': {
+    topic: function() {
+      var server = new Server();
+      server.exchange('authorization_code', function(req, res, next) {
+        next(new Error('should not be called'));
+      });
+
+      return token(server);
+    },
+
+    'when handling a request': {
+      topic: function(token) {
+        var self = this;
+        var req = new MockRequest();
+
+        var res = new MockResponse();
+        res.done = function() {
+          self.callback(new Error('should not be called'));
+        }
+
+        function next(err) {
+          self.callback(null, req, res, err);
+        }
+        process.nextTick(function () {
+          try {
+            token(req, res, next)
+          } catch (e) {
+            self.callback(e);
+          }
+        });
+      },
+
+      'should not respond to request' : function(err, req, res) {
+        assert.isNull(err);
+      },
+      'should next with error' : function(err, req, res, e) {
+        assert.instanceOf(e, Error);
+        assert.equal(e.message, 'Request body not parsed. Use bodyParser middleware.');
+      },
+    },
+  },
+
   'middleware constructed without a server instance': {
     'should throw an error': function () {
       assert.throws(function() { token() });
