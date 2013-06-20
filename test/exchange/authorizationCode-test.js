@@ -45,7 +45,7 @@ vows.describe('authorizationCode').addBatch({
       });
     },
 
-    'when handling a request': {
+    'when handling a request from an authenticated client': {
       topic: function(authorizationCode) {
         var self = this;
         var req = new MockRequest();
@@ -77,6 +77,7 @@ vows.describe('authorizationCode').addBatch({
         assert.equal(res._data, '{"access_token":"s3cr1t","token_type":"bearer"}');
       },
     },
+
   },
   
   'middleware that issues an access token and refresh token': {
@@ -373,7 +374,45 @@ vows.describe('authorizationCode').addBatch({
       },
     },
   },
-  
+
+  'middleware that handles a request lacking a client': {
+    topic: function() {
+      return authorizationCode(function(client, code, redirectURI, done) {
+        done(null, 's3cr1t')
+      });
+    },
+
+    'when handling a request': {
+      topic: function(authorizationCode) {
+        var self = this;
+        var req = new MockRequest();
+        req.body = { code: 'abc123', redirect_uri: 'http://example.com/oa/callback' };
+        
+        var res = new MockResponse();
+        res.done = function() {
+          self.callback(new Error('should not be called'));
+        }
+
+        function next(err) {
+          self.callback(null, req, res, err);
+        }
+        process.nextTick(function () {
+          authorizationCode(req, res, next)
+        });
+      },
+
+      'should not respond to request' : function(err, req, res) {
+        assert.isNull(err);
+      },
+      'should next with error' : function(err, req, res, e) {
+        assert.instanceOf(e, Error);
+        assert.equal(e.constructor.name, 'AuthorizationError');
+        assert.equal(e.code, 'invalid_client');
+        assert.equal(e.message, 'no client found');
+      },
+    },
+  },  
+
   'middleware that handles a request in which body was not parsed': {
     topic: function() {
       return authorizationCode(function(client, code, redirectURI, done) {
