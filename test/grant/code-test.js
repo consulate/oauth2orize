@@ -337,7 +337,7 @@ vows.describe('code').addBatch({
           self.callback(new Error('should not be called'));
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -384,7 +384,7 @@ vows.describe('code').addBatch({
           self.callback(new Error('should not be called'));
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -430,7 +430,7 @@ vows.describe('code').addBatch({
           self.callback(new Error('should not be called'));
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -472,7 +472,7 @@ vows.describe('code').addBatch({
           self.callback(new Error('should not be called'));
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -515,7 +515,7 @@ vows.describe('code').addBatch({
           self.callback(new Error('should not be called'));
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -557,7 +557,7 @@ vows.describe('code').addBatch({
           self.callback(null, req, res, err);
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -605,7 +605,7 @@ vows.describe('code').addBatch({
           self.callback(null, req, res, err);
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 
@@ -649,7 +649,7 @@ vows.describe('code').addBatch({
           self.callback(null, req, res, err);
         }
         process.nextTick(function () {
-          code.response(txn, res, next)
+          code.response(txn, req, res, next)
         });
       },
 

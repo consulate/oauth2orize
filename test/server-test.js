@@ -474,6 +474,7 @@ vows.describe('Server').addBatch({
       var self = this;
       var server = new Server();
       var txn = { req: { type: 'code' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         self.callback(new Error('should not be called'));
@@ -483,7 +484,7 @@ vows.describe('Server').addBatch({
         self.callback(err);
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -501,6 +502,7 @@ vows.describe('Server').addBatch({
       });
       
       var txn = { req: { type: 'code' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         res._data = data;
@@ -511,7 +513,7 @@ vows.describe('Server').addBatch({
         self.callback(new Error('should not be called'));
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -532,6 +534,7 @@ vows.describe('Server').addBatch({
       });
       
       var txn = { req: { type: 'unknown' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         self.callback(new Error('should not be called'));
@@ -541,7 +544,7 @@ vows.describe('Server').addBatch({
         self.callback(err);
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -559,6 +562,7 @@ vows.describe('Server').addBatch({
       });
       
       var txn = { req: { type: 'code' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         res._data = data;
@@ -569,7 +573,7 @@ vows.describe('Server').addBatch({
         self.callback(new Error('should not be called'));
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -594,6 +598,7 @@ vows.describe('Server').addBatch({
       });
       
       var txn = { req: { type: 'code' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         res._data = data;
@@ -604,7 +609,7 @@ vows.describe('Server').addBatch({
         self.callback(new Error('should not be called'));
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -628,6 +633,7 @@ vows.describe('Server').addBatch({
       });
       
       var txn = { req: { type: 'code' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         self.callback(new Error('should not be called'));
@@ -637,7 +643,7 @@ vows.describe('Server').addBatch({
         self.callback(err);
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -656,6 +662,7 @@ vows.describe('Server').addBatch({
       });
       
       var txn = { req: { type: 'code' } };
+      var req = {};
       var res = {};
       res.end = function(data) {
         self.callback(new Error('should not be called'));
@@ -665,7 +672,7 @@ vows.describe('Server').addBatch({
         self.callback(err);
       }
       process.nextTick(function () {
-        server._respond(txn, res, responded);
+        server._respond(txn, req, res, responded);
       });
     },
     
@@ -1012,11 +1019,12 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       function serialized(err, obj) {
         self.callback(err, obj);
       }
       process.nextTick(function () {
-        server.serializeClient({ id: '1', name: 'Foo' }, serialized);
+        server.serializeClient({ id: '1', name: 'Foo' }, req, serialized);
       });
     },
     
@@ -1031,6 +1039,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.serializeClient(function(client, done) {
         done(null, client.id);
       });
@@ -1038,7 +1047,7 @@ vows.describe('Server').addBatch({
         self.callback(err, obj);
       }
       process.nextTick(function () {
-        server.serializeClient({ id: '1', name: 'Foo' }, serialized);
+        server.serializeClient({ id: '1', name: 'Foo' }, req, serialized);
       });
     },
     
@@ -1052,6 +1061,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.serializeClient(function(client, done) {
         done('pass');
       });
@@ -1065,7 +1075,7 @@ vows.describe('Server').addBatch({
         self.callback(err, obj);
       }
       process.nextTick(function () {
-        server.serializeClient({ id: '1', name: 'Foo' }, serialized);
+        server.serializeClient({ id: '1', name: 'Foo' }, req, serialized);
       });
     },
     
@@ -1079,6 +1089,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.serializeClient(function(client, done) {
         // throws ReferenceError: wtf is not defined
         wtf
@@ -1087,7 +1098,7 @@ vows.describe('Server').addBatch({
         self.callback(err, obj);
       }
       process.nextTick(function () {
-        server.serializeClient({ id: '1', name: 'Foo' }, serialized);
+        server.serializeClient({ id: '1', name: 'Foo' }, req, serialized);
       });
     },
     
@@ -1101,11 +1112,12 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       function deserialized(err, client) {
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1120,6 +1132,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(id, done) {
         done(null, { id: id });
       });
@@ -1127,7 +1140,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1141,6 +1154,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(id, done) {
         done('pass');
       });
@@ -1154,7 +1168,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1168,6 +1182,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(id, done) {
         done(null, null);
       });
@@ -1175,7 +1190,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1189,6 +1204,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(id, done) {
         done(null, false);
       });
@@ -1196,7 +1212,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1210,6 +1226,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(obj, done) {
         done('pass');
       });
@@ -1223,7 +1240,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1237,6 +1254,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(obj, done) {
         done('pass');
       });
@@ -1250,7 +1268,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
@@ -1264,6 +1282,7 @@ vows.describe('Server').addBatch({
     topic: function() {
       var self = this;
       var server = new Server();
+      var req = {};
       server.deserializeClient(function(obj, done) {
         // throws ReferenceError: wtf is not defined
         wtf
@@ -1272,7 +1291,7 @@ vows.describe('Server').addBatch({
         self.callback(err, client);
       }
       process.nextTick(function () {
-        server.deserializeClient('1', deserialized);
+        server.deserializeClient('1', req, deserialized);
       });
     },
     
